@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#F6C500">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="محاسبه‌گر ایرانسل">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>محاسبه‌گر اینترنت داخلی ایرانسل</title>
+<style>
+:root{
+  --bg:#f4f7fb;--card:#fff;--card2:#f8fafc;--text:#101828;--muted:#667085;
+  --line:#e4e7ec;--accent:#f6c500;--good:#0f9f6e;--danger:#d92d20;
+  --shadow:0 18px 50px rgba(16,24,40,.10)
+}
+[data-theme="dark"]{
+  --bg:#080d18;--card:#111827;--card2:#182132;--text:#f8fafc;--muted:#98a2b3;
+  --line:#263246;--accent:#ffd400;--good:#38d39f;--danger:#ff6b61;
+  --shadow:0 22px 60px rgba(0,0,0,.35)
+}
+*{box-sizing:border-box}
+html{-webkit-tap-highlight-color:transparent}
+body{
+  margin:0;min-height:100vh;display:grid;place-items:center;
+  font-family:Tahoma,Arial,sans-serif;
+  background:
+    radial-gradient(circle at 85% 10%,rgba(246,197,0,.15),transparent 30%),
+    radial-gradient(circle at 10% 90%,rgba(17,24,39,.08),transparent 32%),
+    var(--bg);
+  color:var(--text);padding:18px;
+}
+.app{width:min(100%,460px)}
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:26px;
+  box-shadow:var(--shadow);overflow:hidden
+}
+.header{
+  padding:20px 20px 16px;display:flex;align-items:center;justify-content:space-between;gap:16px
+}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{
+  width:48px;height:48px;border-radius:16px;background:var(--accent);color:#111827;
+  display:grid;place-items:center;font-size:24px;font-weight:900;
+  box-shadow:0 8px 24px rgba(246,197,0,.28)
+}
+h1{font-size:17px;margin:0 0 4px;font-weight:900}
+.sub{font-size:12px;color:var(--muted)}
+.actions{display:flex;gap:8px}
+.iconbtn{
+  border:1px solid var(--line);background:var(--card2);color:var(--text);
+  width:42px;height:42px;border-radius:14px;cursor:pointer;font-size:18px
+}
+.install{
+  display:none;margin:0 20px 14px;width:calc(100% - 40px);border:0;border-radius:14px;
+  padding:12px 14px;background:#101828;color:#fff;font:inherit;font-weight:900;cursor:pointer
+}
+.content{padding:4px 20px 20px}
+.rate{
+  display:flex;align-items:center;justify-content:space-between;background:var(--card2);
+  border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin-bottom:16px;font-size:13px
+}
+.badge{background:rgba(246,197,0,.18);color:var(--text);font-weight:900;padding:6px 10px;border-radius:999px}
+.field{margin-bottom:13px}
+label{display:block;font-size:13px;font-weight:800;margin:0 0 7px}
+.inputrow{
+  display:grid;grid-template-columns:1fr 92px;border:1px solid var(--line);
+  background:var(--card2);border-radius:15px;overflow:hidden;transition:.2s
+}
+.inputrow:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(246,197,0,.12)}
+input,select{border:0;outline:0;background:transparent;color:var(--text);padding:13px 14px;font:inherit;font-size:15px}
+input{direction:ltr;text-align:left;font-weight:800}
+select{border-right:1px solid var(--line);cursor:pointer}
+button.calc{
+  width:100%;border:0;border-radius:15px;padding:14px 16px;margin:5px 0 16px;
+  background:var(--accent);color:#111827;font:inherit;font-weight:950;font-size:15px;
+  cursor:pointer;box-shadow:0 10px 24px rgba(246,197,0,.23)
+}
+.results{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.result{background:var(--card2);border:1px solid var(--line);border-radius:17px;padding:13px;min-height:84px}
+.result.main{grid-column:1/-1;background:linear-gradient(135deg,rgba(246,197,0,.22),var(--card2))}
+.rlabel{font-size:11px;color:var(--muted);margin-bottom:7px}
+.rvalue{font-size:20px;font-weight:950;direction:ltr;text-align:right}
+.main .rvalue{font-size:27px}
+.unit{font-size:11px;color:var(--muted);font-weight:700;margin-right:4px}
+.progress-wrap{margin-top:14px}
+.progress-head{display:flex;justify-content:space-between;color:var(--muted);font-size:11px;margin-bottom:7px}
+.progress{height:9px;background:var(--card2);border:1px solid var(--line);border-radius:99px;overflow:hidden}
+.progress>span{display:block;height:100%;width:0;background:var(--good);transition:width .35s;border-radius:99px}
+.note{font-size:10.5px;line-height:1.8;color:var(--muted);margin-top:13px;text-align:center}
+.error{color:var(--danger)!important}
+.pwa-note{
+  margin-top:12px;padding:10px 12px;border:1px dashed var(--line);border-radius:13px;
+  color:var(--muted);font-size:10.5px;line-height:1.8;text-align:center
+}
+@media(max-width:390px){
+  .results{grid-template-columns:1fr}.result.main{grid-column:auto}
+  .header,.content{padding-left:15px;padding-right:15px}
+  .install{margin-left:15px;margin-right:15px;width:calc(100% - 30px)}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="card">
+    <div class="header">
+      <div class="brand">
+        <div class="logo">٪</div>
+        <div>
+          <h1>محاسبه‌گر اینترنت داخلی</h1>
+          <div class="sub">نسخه قابل نصب روی گوشی</div>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="iconbtn" id="themeBtn" aria-label="تغییر حالت">☾</button>
+      </div>
+    </div>
+
+    <button class="install" id="installBtn">نصب برنامه روی گوشی</button>
+
+    <div class="content">
+      <div class="rate">
+        <span>ضریب محاسبه ترافیک داخلی</span>
+        <span class="badge">۳۷٪</span>
+      </div>
+
+      <div class="field">
+        <label for="package">حجم اینترنت موجود</label>
+        <div class="inputrow">
+          <input id="package" type="number" min="0" step="any" value="10" inputmode="decimal">
+          <select id="packageUnit">
+            <option value="GB">GB</option><option value="MB">MB</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="download">حجم فایل دانلود شده</label>
+        <div class="inputrow">
+          <input id="download" type="number" min="0" step="any" value="1" inputmode="decimal">
+          <select id="downloadUnit">
+            <option value="GB">GB</option><option value="MB">MB</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="calc" id="calcBtn">محاسبه مصرف داخلی</button>
+
+      <div class="results">
+        <div class="result main">
+          <div class="rlabel">حجم کسرشده از بسته</div>
+          <div class="rvalue"><span id="used">0.37</span><span class="unit">GB</span></div>
+        </div>
+        <div class="result">
+          <div class="rlabel">حجم باقی‌مانده بسته</div>
+          <div class="rvalue"><span id="remain">9.63</span><span class="unit">GB</span></div>
+        </div>
+        <div class="result">
+          <div class="rlabel">حداکثر دانلود داخلی با حجم موجود</div>
+          <div class="rvalue"><span id="capacity">27.03</span><span class="unit">GB</span></div>
+        </div>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-head"><span>مصرف بسته</span><span id="percent">3.7٪</span></div>
+        <div class="progress"><span id="bar"></span></div>
+      </div>
+
+      <div class="note" id="note">هر ۱ گیگابایت ترافیک داخلی، حدود ۰٫۳۷ گیگابایت از بسته کسر می‌کند.</div>
+      <div class="pwa-note">برای نصب واقعی PWA، فایل‌ها باید روی HTTPS یا localhost اجرا شوند. بعد از اولین بازدید، برنامه به‌صورت آفلاین هم باز می‌شود.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const RATE = 0.37;
+const $ = id => document.getElementById(id);
+function toGB(value, unit){ return unit === 'MB' ? value / 1024 : value; }
+function fmt(v){
+  if (!isFinite(v)) return '0';
+  if (v >= 100) return v.toFixed(1).replace(/\.0$/,'');
+  if (v >= 10) return v.toFixed(2).replace(/0+$/,'').replace(/\.$/,'');
+  return v.toFixed(3).replace(/0+$/,'').replace(/\.$/,'');
+}
+function calculate(){
+  const pkg = toGB(parseFloat($('package').value || 0), $('packageUnit').value);
+  const dl  = toGB(parseFloat($('download').value || 0), $('downloadUnit').value);
+  const used = dl * RATE;
+  const remain = Math.max(0, pkg - used);
+  const capacity = pkg / RATE;
+  const pct = pkg > 0 ? Math.min(100, (used/pkg)*100) : 0;
+  $('used').textContent = fmt(used);
+  $('remain').textContent = fmt(remain);
+  $('capacity').textContent = fmt(capacity);
+  $('percent').textContent = fmt(pct) + '٪';
+  $('bar').style.width = pct + '%';
+  if (used > pkg && pkg > 0){
+    $('note').textContent = 'حجم دانلود واردشده بیشتر از ظرفیتی است که بسته فعلی برای ترافیک داخلی پوشش می‌دهد.';
+    $('note').classList.add('error');
+  } else {
+    $('note').textContent = 'هر ۱ گیگابایت ترافیک داخلی، حدود ۰٫۳۷ گیگابایت از بسته کسر می‌کند.';
+    $('note').classList.remove('error');
+  }
+}
+['package','download','packageUnit','downloadUnit'].forEach(id=>{
+  $(id).addEventListener('input', calculate);
+  $(id).addEventListener('change', calculate);
+});
+$('calcBtn').addEventListener('click', calculate);
+
+const root = document.documentElement;
+if(localStorage.getItem('irancell-theme') === 'dark'){
+  root.setAttribute('data-theme','dark'); $('themeBtn').textContent='☀';
+}
+$('themeBtn').addEventListener('click',()=>{
+  const dark = root.getAttribute('data-theme') === 'dark';
+  if(dark){ root.removeAttribute('data-theme'); localStorage.setItem('irancell-theme','light'); $('themeBtn').textContent='☾'; }
+  else{ root.setAttribute('data-theme','dark'); localStorage.setItem('irancell-theme','dark'); $('themeBtn').textContent='☀'; }
+});
+
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  $('installBtn').style.display = 'block';
+});
+$('installBtn').addEventListener('click', async () => {
+  if(!deferredPrompt) return;
+  deferredPrompt.prompt();
+  await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  $('installBtn').style.display = 'none';
+});
+window.addEventListener('appinstalled', () => $('installBtn').style.display='none');
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>navigator.serviceWorker.register('./service-worker.js'));
+}
+calculate();
+</script>
+</body>
+</html>
